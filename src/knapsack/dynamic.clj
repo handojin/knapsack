@@ -26,20 +26,20 @@
    "babe"       30    10
    ])
 
-(def inputs 
-  ["nil" 0 0
-   "A" 4 6
-   "B" 2 4
-   "C" 3 5
-   "D" 1 3
-   "E" 6 9
-   "F" 4 7])
+;; (def inputs 
+;;   ["nil" 0 0
+;;    "A" 4 6
+;;    "B" 2 4
+;;    "C" 3 5
+;;    "D" 1 3
+;;    "E" 6 9
+;;    "F" 4 7])
 
 (defn pack [v w n W]
-  (println v)
-  (println w)
-  (println n)
-  (println W)
+  ;; (println v)
+  ;; (println w)
+  ;; (println n)
+  ;; (println W)
 
   (let [v (int-array v)
         w (int-array w)
@@ -64,15 +64,24 @@
      :items (vec (filter number? (map-indexed (fn [i v] (if (true? v) i)) k)))}
 ))
 
+(defn print-results [names weights values results] 
+  (printf "packed dolls: \n\n\n")
+  (printf "%-10s\t%s\t%s\n" "name" "weight" "value")
+  (let [keys (:items results)]
+    (doseq [i keys]
+      (printf "%-10s\t%d\t%d\n" (nth names i) (nth weights i) (nth values i)))))
+
+
 (defn knapsack [inputs limit]
   (let [items (partition 3 inputs)
         names (mapv first items)
         w (mapv second items)
         v (mapv last items)
         n (count items)
-        W (+ 1  limit)]
-    (pack v w n W)))
-
+        W (+ 1  limit)
+        results (pack v w n W)]
+    (print-results names w v results)))
 
 (knapsack inputs 400)
+
 
