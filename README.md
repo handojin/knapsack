@@ -24,6 +24,12 @@ Change to the project directory and run test via leiningen:
 . cd knapsack
 . lein test
 
+## Notes
+
+The brute force solver explodes when the number of items is greater than 21.
+
+The dynamic solver works but it needs some love.
+
 ## License
 
 Copyright © 2015 
