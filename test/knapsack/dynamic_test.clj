@@ -26,8 +26,10 @@
                   "tory"       18    12
                   "sally"       4    50
                   "babe"       30    10]
-          limit 400]      
-      (is (= (knapsack inputs limit) 1030)))))
+          limit 400
+          result (knapsack inputs limit)]      
+      (is (= (:value result) 1030))
+      (is (= (:items result) '(1 2 3 4 5 7 11 16 17 18 19 21))))))
 
 (deftest test-small
   (testing "from http://www.cs.ucf.edu/~dmarino/ucf/cop3503/lectures/DynProgKnapsack.doc"
@@ -37,5 +39,25 @@
                   "D" 1 3
                   "E" 6 9
                   "F" 4 7]
-          limit 10]      
-      (is (= (knapsack inputs limit) 19)))))
+          limit 10
+          result (knapsack inputs limit)]      
+      (is (= (:value result) 19))
+      (is (= (:items result) '(2 3 4 6))))))
+
+
+(deftest test-p01
+  (testing "from https://people.sc.fsu.edu/~jburkardt/datasets/knapsack_01/knapsack_01.html"
+    (let [inputs ["A" 23 92
+                  "B" 31 57
+                  "C" 29 49
+                  "D" 44 68
+                  "E" 53 60
+                  "F" 38 43
+                  "G" 63 67
+                  "H" 85 84
+                  "I" 89 87
+                  "J" 82 72]
+          limit  165
+          result (knapsack inputs limit)]      
+      (is (= (:value result) 309))
+      (is (= (:items result) '(1 2 3 4 6))))))

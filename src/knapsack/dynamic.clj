@@ -32,11 +32,19 @@
    "E" 6 9
    "F" 4 7])
 
+(def inputs
+  ["A" 23 92
+   "B" 31 57
+   "C" 29 49
+   "D" 44 68
+   "E" 53 60
+   "F" 38 43
+   "G" 63 67
+   "H" 85 84
+   "I" 89 87
+   "J" 82 72])
+
 (defn get-items [kept weights i K indices]
-  ;; (println i)
-  ;; (println K)
-  ;; (println (aget kept i K))
-  ;;(println indices)
   (if (> i 0) 
     (if (= (aget kept i K) 1)
       (get-items kept weights (dec i) (- K (aget weights i)) (conj indices i))
@@ -47,9 +55,7 @@
   (let [v (int-array v)
         w (int-array w)
         m (make-array Integer/TYPE n W)
-        k (make-array Integer/TYPE n W)
-        ;;r (make-array Boolean/TYPE n)
-        ]
+        k (make-array Integer/TYPE n W)]
 
     (doseq [i (range 1 n)]
       (doseq [j (range 0 W)]
@@ -62,14 +68,11 @@
           (do  (aset-int m i j (aget m (dec i) j))
                (aset-int k i j 0)))))
     
-    
-    ;; (doseq [i (reverse (range n))]
-    ;;   (if (true? aget k i W)))
+    (clojure.pprint/pprint m)
 
-    (clojure.pprint/pprint k)
-    {:value (aget m (dec n) (dec W)) 
-     :items (get-items k w (dec n) (dec W) ())}
-))
+    {:value (aget m (dec n) (dec W))
+     :calculated (apply + (map #(nth v %) (get-items k w (dec n) (dec W) ())))
+     :items (get-items k w (dec n) (dec W) ())}))
 
 (defn print-results [names weights values results] 
   (printf "packed dolls: \n\n\n")
@@ -88,7 +91,7 @@
         W (+ 1  limit)
         results (pack v w n W)]
     (print-results names w v results)
-    (:value results)))
+    results))
 
 
 
