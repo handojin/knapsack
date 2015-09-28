@@ -68,7 +68,7 @@
           (do  (aset-int m i j (aget m (dec i) j))
                (aset-int k i j 0)))))
     
-    (clojure.pprint/pprint m)
+    ;;(clojure.pprint/pprint m)
 
     {:value (aget m (dec n) (dec W))
      :calculated (apply + (map #(nth v %) (get-items k w (dec n) (dec W) ())))

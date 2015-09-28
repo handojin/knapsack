@@ -1,5 +1,5 @@
-(defproject knapsack "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+(defproject knapsack "0.0.1-SNAPSHOT"
+  :description "brute force and dynamic solvers for the 0/1 Knapsack Problem"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
