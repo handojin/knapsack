@@ -1,57 +1,13 @@
 (ns knapsack.dynamic)
 
-(def inputs
-  ["luke"        9   150
-   "anthony"    13    35
-   "candice"   153   200
-   "dorothy"    50   160
-   "puppy"      15    60
-   "thomas"     68    45
-   "randal"     27    60
-   "april"      39    40
-   "nancy"      23    30
-   "bonnie"     52    10
-   "marc"       11    70
-   "kate"       32    30
-   "tbone"      24    15
-   "tommy"      48    10
-   "uma"        73    40
-   "grumpkin"   42    70
-   "dusty"      43    75
-   "grumpy"     22    80
-   "eddie"       7    20
-   "tory"       18    12
-   "sally"       4    50
-   "babe"       30    10])
-
-(def inputs 
-  ["A" 4 6
-   "B" 2 4
-   "C" 3 5
-   "D" 1 3
-   "E" 6 9
-   "F" 4 7])
-
-(def inputs
-  ["A" 23 92
-   "B" 31 57
-   "C" 29 49
-   "D" 44 68
-   "E" 53 60
-   "F" 38 43
-   "G" 63 67
-   "H" 85 84
-   "I" 89 87
-   "J" 82 72])
-
-(defn get-items [kept weights i K indices]
+(defn- get-items [kept weights i K indices]
   (if (> i 0) 
     (if (= (aget kept i K) 1)
       (get-items kept weights (dec i) (- K (aget weights i)) (conj indices i))
       (get-items kept weights (dec i) K indices))
     indices))
 
-(defn pack [v w n W]
+(defn- pack [v w n W]
   (let [v (int-array v)
         w (int-array w)
         m (make-array Integer/TYPE n W)
@@ -74,12 +30,13 @@
      :calculated (apply + (map #(nth v %) (get-items k w (dec n) (dec W) ())))
      :items (get-items k w (dec n) (dec W) ())}))
 
-(defn print-results [names weights values results] 
+(defn- print-results [names weights values results] 
   (printf "packed dolls: \n\n\n")
   (printf "%-10s\t%s\t%s\n" "name" "weight" "value")
   (let [keys (:items results)]
     (doseq [i keys]
-      (printf "%-10s\t%d\t%d\n" (nth names i) (nth weights i) (nth values i)))))
+      (printf "%-10s\t%d\t%d\n" (nth names i) (nth weights i) (nth values i))))
+  (printf "\n\n"))
 
 
 (defn knapsack [inputs limit]
