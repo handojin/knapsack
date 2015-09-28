@@ -1,8 +1,7 @@
 (ns knapsack.dynamic)
 
 (def inputs
-  ["nil"         0     0
-   "luke"        9   150
+  ["luke"        9   150
    "anthony"    13    35
    "candice"   153   200
    "dorothy"    50   160
@@ -23,45 +22,53 @@
    "eddie"       7    20
    "tory"       18    12
    "sally"       4    50
-   "babe"       30    10
-   ])
+   "babe"       30    10])
 
-;; (def inputs 
-;;   ["nil" 0 0
-;;    "A" 4 6
-;;    "B" 2 4
-;;    "C" 3 5
-;;    "D" 1 3
-;;    "E" 6 9
-;;    "F" 4 7])
+(def inputs 
+  ["A" 4 6
+   "B" 2 4
+   "C" 3 5
+   "D" 1 3
+   "E" 6 9
+   "F" 4 7])
+
+(defn get-items [kept weights i K indices]
+  ;; (println i)
+  ;; (println K)
+  ;; (println (aget kept i K))
+  ;;(println indices)
+  (if (> i 0) 
+    (if (= (aget kept i K) 1)
+      (get-items kept weights (dec i) (- K (aget weights i)) (conj indices i))
+      (get-items kept weights (dec i) K indices))
+    indices))
 
 (defn pack [v w n W]
-  ;; (println v)
-  ;; (println w)
-  ;; (println n)
-  ;; (println W)
-
   (let [v (int-array v)
         w (int-array w)
         m (make-array Integer/TYPE n W)
-        k (make-array Boolean/TYPE n)]
-    ;;(clojure.pprint/pprint k)
+        k (make-array Integer/TYPE n W)
+        ;;r (make-array Boolean/TYPE n)
+        ]
+
     (doseq [i (range 1 n)]
       (doseq [j (range 0 W)]
         (if (and (<= (aget w i) j) 
                  (<  (aget m (dec i) j) (+ (aget v i) (aget m (dec i) (- j (aget w i))))))  
-          (do  (aset-int m i j 
-                         ;;(max (aget m (dec i) j)) 
-                         (+ (aget v i) (aget m (dec i) (- j (aget w i)))))
-               (aset-boolean k i true))
+          
+          (do  (aset-int m i j (+ (aget v i) (aget m (dec i) (- j (aget w i)))))
+               (aset-int k i j 1))
           
           (do  (aset-int m i j (aget m (dec i) j))
-               (aset-boolean k i false)))
-        ))
-    ;;(clojure.pprint/pprint m)
-    ;;(clojure.pprint/pprint k)
+               (aset-int k i j 0)))))
+    
+    
+    ;; (doseq [i (reverse (range n))]
+    ;;   (if (true? aget k i W)))
+
+    (clojure.pprint/pprint k)
     {:value (aget m (dec n) (dec W)) 
-     :items (vec (filter number? (map-indexed (fn [i v] (if (true? v) i)) k)))}
+     :items (get-items k w (dec n) (dec W) ())}
 ))
 
 (defn print-results [names weights values results] 
@@ -73,15 +80,15 @@
 
 
 (defn knapsack [inputs limit]
-  (let [items (partition 3 inputs)
+  (let [items (cons '("nil" 0 0) (partition 3 inputs))
         names (mapv first items)
         w (mapv second items)
         v (mapv last items)
         n (count items)
         W (+ 1  limit)
         results (pack v w n W)]
-    (print-results names w v results)))
+    (print-results names w v results)
+    (:value results)))
 
-(knapsack inputs 400)
 
 
